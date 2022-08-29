@@ -35,7 +35,8 @@ const defaultMockInputs: Inputs = {
   setDistributionChecksum: true,
   paths: [],
   pathsIgnore: [],
-  releaseChannel: ''
+  releaseChannel: '',
+  distributionsBaseUrl: ''
 };
 
 const defaultMockGitHubApi: IGitHubApi = {
