@@ -26,27 +26,37 @@ export interface IWrapperUpdater {
 export function createWrapperUpdater(
   wrapper: IWrapperInfo,
   targetRelease: Release,
-  setDistributionChecksum: boolean
+  setDistributionChecksum: boolean,
+  distributionsBaseUrl: string
 ): IWrapperUpdater {
-  return new WrapperUpdater(wrapper, targetRelease, setDistributionChecksum);
+  return new WrapperUpdater(
+    wrapper,
+    targetRelease,
+    setDistributionChecksum,
+    distributionsBaseUrl
+  );
 }
 
 class WrapperUpdater implements IWrapperUpdater {
   private targetRelease: Release;
   private wrapper: IWrapperInfo;
-  private setDistributionChecksum: boolean;
+  private readonly setDistributionChecksum: boolean;
+  private readonly distributionsBaseUrl : string;
 
   constructor(
     wrapper: IWrapperInfo,
     targetRelease: Release,
-    setDistributionChecksum: boolean
+    setDistributionChecksum: boolean,
+    distributionsBaseUrl : string
   ) {
     this.wrapper = wrapper;
     this.targetRelease = targetRelease;
     this.setDistributionChecksum = setDistributionChecksum;
+    this.distributionsBaseUrl = distributionsBaseUrl;
   }
 
   async update() {
+
     let args = [
       'wrapper',
       '--gradle-version',
@@ -54,6 +64,17 @@ class WrapperUpdater implements IWrapperUpdater {
       '--distribution-type',
       this.wrapper.distType
     ];
+
+    if (this.distributionsBaseUrl) {
+      const url = `${this.distributionsBaseUrl}/gradle-${this.targetRelease.version}-${this.wrapper.distType}.zip`;
+      args = [
+        'wrapper',
+        '--gradle-distribution-url',
+        url
+      ]
+    }
+
+
 
     if (this.setDistributionChecksum) {
       const sha256sum =
