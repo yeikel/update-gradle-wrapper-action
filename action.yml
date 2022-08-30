@@ -45,6 +45,10 @@ inputs:
     description: 'Gradle release channel to be used (either `stable` or `release-candidate`).'
     required: false
     default: stable
+  distributions-base-url:
+    description: 'Sets a custom base url to download the distributions'
+    required: false
+    default: ''
 
 runs:
   using: 'node16'
